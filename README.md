@@ -42,6 +42,23 @@ Unlike scripts installed by `gh skill install`, these have executable bits;
 their implementation lives in the installed skill and follows its pinned
 version. It refuses to replace existing launchers without `--replace`.
 
+## OpenCode configuration across projects
+
+The portable OpenCode **V2** policy baseline lives in
+[`harnesses/opencode/opencode.jsonc`](harnesses/opencode/opencode.jsonc),
+separately from the agent skills. `gh skill install` does not install harness
+config. From a reviewed checkout, preview and install it globally:
+
+```sh
+python3 scripts/install-opencode.py
+python3 scripts/install-opencode.py --apply
+```
+
+It backs up existing global config and the legacy `block-pass-secrets` plugin,
+and refuses to overwrite unrecognized settings without explicit review.
+See [the OpenCode harness README](harnesses/opencode/README.md) for security
+semantics and rollback. No secret material belongs in this public repository.
+
 ## Use a skill's scripts in GitHub Actions
 
 Local agent installation does not make scripts available on GitHub runners.

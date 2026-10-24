@@ -1,0 +1,14 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "permissions": [
+    { "action": "shell", "resource": "passenv *", "effect": "ask" },
+    { "action": "shell", "resource": "passkeys *", "effect": "allow" }
+  ],
+  "policies": [
+    { "action": "tool.use", "resource": "shell:pass *", "effect": "deny" },
+    { "action": "tool.use", "resource": "shell:pass ls *", "effect": "allow" },
+    { "action": "tool.use", "resource": "shell:pass find *", "effect": "allow" },
+    { "action": "tool.use", "resource": "shell:pass help *", "effect": "allow" },
+    { "action": "tool.use", "resource": "shell:pass --version", "effect": "allow" }
+  ]
+}

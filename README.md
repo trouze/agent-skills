@@ -42,6 +42,25 @@ Unlike scripts installed by `gh skill install`, these have executable bits;
 their implementation lives in the installed skill and follows its pinned
 version. It refuses to replace existing launchers without `--replace`.
 
+### Externally maintained skills
+
+Keep the official [`using-exe-dev`](https://github.com/boldsoftware/exe.dev/blob/main/skill/SKILL.md)
+skill upstream-owned instead of copying it into this repository. Its GitHub
+release tags are for other exe.dev components and can lag behind the skill.
+Install by **skill name** (not `skill/SKILL.md`, which installs to a generic
+local directory), and track the upstream `main` branch deliberately:
+
+```sh
+gh skill install boldsoftware/exe.dev using-exe-dev@main --agent opencode --scope user
+gh skill update using-exe-dev  # check/apply changes when you choose to update
+```
+
+Preview changes with `gh skill preview boldsoftware/exe.dev using-exe-dev@main`
+before updating. The current upstream skill suggests SSH `accept-new` for
+unfamiliar hosts; prefer independently verified host keys for VM access, as
+documented in our `dagger-exe` skill. No exe.dev account or VM keys are copied
+into this repository.
+
 ## OpenCode configuration across projects
 
 The portable OpenCode **V2** policy baseline lives in

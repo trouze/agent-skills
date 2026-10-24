@@ -2,7 +2,7 @@
 name: pass
 description: Use this skill when accessing credentials stored in pass, using passenv/passkeys, or preparing authenticated CLI/API commands that need pass-store secrets. Discover only entry and variable names; inject values into a child process with passenv instead of printing passwords or copying them into chat. Applies across projects, not just homelab.
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # Credential Handling via pass

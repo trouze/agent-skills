@@ -33,7 +33,7 @@ install won't silently update when a new release is published.
 For `pass` on this Mac (one global installation, not one copy per project):
 
 ```sh
-gh skill install trouze/agent-skills pass --agent opencode --scope user --pin v1.1.0
+gh skill install trouze/agent-skills pass --agent opencode --scope user --pin v1.1.1
 python3 ~/.config/opencode/skills/pass/scripts/install_helpers.py
 ```
 

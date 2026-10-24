@@ -3,6 +3,9 @@
 
 import sys
 
+# Avoid creating __pycache__ inside the globally installed skill at runtime.
+sys.dont_write_bytecode = True
+
 from passenv import print_names
 
 

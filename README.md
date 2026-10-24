@@ -72,22 +72,23 @@ credentials; see [`skills/dagger-exe/references/github-actions.md`](skills/dagge
 Project-specific `dagger.toml`, `dagger.lock` and `.dagger/modules/` remain in
 each project repository, not here.
 
-## Release `dagger-exe`
+## Release a skill
 
-1. Change `metadata.version` in `skills/dagger-exe/SKILL.md` to the next
-   semantic version. Review script changes carefully; this skill handles
-   SSH credentials and remote Docker connections. Coordinate Dagger CLI and
-   engine version changes separately from the skill's release version.
-2. Run `bash -n skills/dagger-exe/scripts/*.sh` and
-   `gh skill publish --dry-run` from this repository. Open a PR; CI also checks
-   script syntax. Merge it into `main`.
+1. Bump `metadata.version` in the changed skill's `SKILL.md`. This is that
+   skill's version; the **GitHub release tag versions this entire repository**
+   and may have a different number (for example, `pass` 1.0.1 first appears in
+   repo release `v1.1.1`). Review changes to scripts handling credentials and
+   remote engines carefully. Coordinate Dagger CLI/engine versions separately.
+2. Run `gh skill publish --dry-run` and
+   `python3 -m unittest discover -s tests -v`. CI repeats the helper tests and
+   checks script syntax. Merge your reviewed changes into `main`.
 3. From a clean, up-to-date `main`, run:
 
    ```sh
-   VERSION=1.0.1                # substitute the metadata.version above
-   gh skill publish --tag "v$VERSION"
-   gh release view "v$VERSION"
-   git rev-parse HEAD             # full SHA to pin in project workflows
+   REPO_VERSION=1.2.0  # choose the next unused repository release version
+   gh skill publish --tag "v$REPO_VERSION"
+   gh release view "v$REPO_VERSION"
+   git rev-parse HEAD  # full SHA to pin in project workflows
    ```
 
    `gh skill publish` validates the skill and creates a tag and GitHub release.

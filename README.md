@@ -10,10 +10,10 @@ tooling they use in CI.
 
 ```sh
 # Available in all projects on this machine (recommended):
-gh skill install trouze/agent-skills dagger-exe --agent opencode --scope user --pin v1.0.0
+gh skill install trouze/agent-skills dagger-exe --agent opencode --scope user --pin v1.0.1
 
 # Or install into one project instead (a tracked copy; no longer one local copy):
-gh skill install trouze/agent-skills dagger-exe --agent opencode --scope project --pin v1.0.0
+gh skill install trouze/agent-skills dagger-exe --agent opencode --scope project --pin v1.0.1
 
 # Also supported: --agent claude-code, and gh skill update for intentional upgrades.
 ```
@@ -37,7 +37,7 @@ copying the scripts into that project:
 - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
   with:
     repository: trouze/agent-skills
-    ref: <full 40-character commit SHA of reviewed release> # dagger-exe v1.0.0
+    ref: <full 40-character commit SHA of reviewed release> # dagger-exe v1.0.1
     path: .ci/agent-skills
     persist-credentials: false
 ```
@@ -65,8 +65,9 @@ each project repository, not here.
 3. From a clean, up-to-date `main`, run:
 
    ```sh
-   gh skill publish --tag v1.0.0  # substitute the metadata.version above
-   gh release view v1.0.0
+   VERSION=1.0.1                # substitute the metadata.version above
+   gh skill publish --tag "v$VERSION"
+   gh release view "v$VERSION"
    git rev-parse HEAD             # full SHA to pin in project workflows
    ```
 

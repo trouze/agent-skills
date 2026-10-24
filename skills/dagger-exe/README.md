@@ -23,7 +23,7 @@ config or key files.
 From your project root:
 
 ```bash
-export SKILL="$HOME/.agents/skills/dagger-exe"
+export SKILL="$HOME/.config/opencode/skills/dagger-exe" # gh skill install --agent opencode --scope user
 "$SKILL/scripts/install-cli.sh"
 export PATH="$HOME/.local/bin:$PATH"
 ```

@@ -3,7 +3,7 @@ name: dagger-exe
 description: Configure and run Dagger v1.0.0-beta.21 and native Dang pipelines across projects, using local Colima or a persistent engine on an exe.dev VM. Use when adding Dagger to a project, debugging engine or cache selection, or configuring trusted GitHub Actions jobs to use the shared VM over SSH.
 compatibility: Bash, curl, tar, OpenSSH and a Docker CLI; macOS or Linux. Local execution also needs a running Docker-compatible daemon, preferably Colima. Remote execution needs authorized exe.dev SSH access. No public engine port is required.
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
   dagger-version: "v1.0.0-beta.21"
 ---
 

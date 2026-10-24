@@ -21,3 +21,7 @@ jobs:
           bash -n skills/dagger-exe/scripts/*.sh
           grep -Eq '^name: dagger-exe$' skills/dagger-exe/SKILL.md
           grep -Eq '^  version: "[0-9]+\.[0-9]+\.[0-9]+"$' skills/dagger-exe/SKILL.md
+          grep -Eq '^name: pass$' skills/pass/SKILL.md
+          grep -Eq '^  version: "[0-9]+\.[0-9]+\.[0-9]+"$' skills/pass/SKILL.md
+      - name: Test pass helpers without real credentials
+        run: python3 -m unittest discover -s tests -v

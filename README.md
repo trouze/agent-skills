@@ -4,6 +4,13 @@ One source for my reusable agent skills. Each skill lives under `skills/`;
 projects keep their own application-specific pipelines and pin the shared
 tooling they use in CI.
 
+Available skills:
+
+- [`dagger-exe`](skills/dagger-exe/SKILL.md): Dagger/Dang with local or shared
+  exe.dev engine. Its scripts can be checked out by CI at a pinned commit.
+- [`pass`](skills/pass/SKILL.md): handling pass-store credentials with the
+  `passenv`/`passkeys` helpers. Agent guidance only; no CI dependency.
+
 ## Install a skill for local agent use
 
 `gh` 2.90+ supports agent skills without another package manager:
@@ -22,6 +29,18 @@ The global install is sufficient for *agent discovery* in every project. You
 don't need to copy skills into each project for an agent to find them. Installed
 files are local replicas of this Git repo, not another source of truth. A pinned
 install won't silently update when a new release is published.
+
+For `pass` on this Mac (one global installation, not one copy per project):
+
+```sh
+gh skill install trouze/agent-skills pass --agent opencode --scope user --pin v1.1.0
+python3 ~/.config/opencode/skills/pass/scripts/install_helpers.py
+```
+
+The second command creates `~/.local/bin/passenv` and `passkeys` launchers.
+Unlike scripts installed by `gh skill install`, these have executable bits;
+their implementation lives in the installed skill and follows its pinned
+version. It refuses to replace existing launchers without `--replace`.
 
 ## Use a skill's scripts in GitHub Actions
 

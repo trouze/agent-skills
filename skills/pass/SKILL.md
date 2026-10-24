@@ -2,7 +2,7 @@
 name: pass
 description: Use this skill when accessing credentials stored in pass, using passenv/passkeys, or preparing authenticated CLI/API commands that need pass-store secrets. Discover only entry and variable names; inject values into a child process with passenv instead of printing passwords or copying them into chat. Applies across projects, not just homelab.
 metadata:
-  version: "1.0.1"
+  version: "1.0.2"
 ---
 
 # Credential Handling via pass
@@ -21,10 +21,11 @@ OS privileges; this is not an isolation boundary.
 Do not run `pass show <entry>`, `pass grep ...`, bare `pass <entry>`, or read
 password-store files directly through agent tools: they print credentials.
 The wrappers call `pass show` internally but never expose its raw output.
-This skill is guidance, **not** an access-control mechanism. The homelab repo
-also has OpenCode permission rules and may have agent-specific hooks, but
-other projects must configure their own safeguards; don't assume commands
-are automatically blocked everywhere.
+This skill is guidance, **not** an access-control mechanism. The
+`trouze/agent-skills` repository also ships an optional OpenCode V2 global
+policy baseline under `harnesses/opencode/`; it must be installed separately
+from the skill. For other harnesses or machines, configure safeguards there;
+do not assume commands are automatically blocked everywhere.
 
 Use `pass ls`, `pass find` or `pass help` for metadata. **Do not assume**
 `pass generate`, `pass insert` or `pass edit` are metadata-only: they can print

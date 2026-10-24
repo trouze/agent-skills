@@ -10,16 +10,18 @@ Available skills:
   exe.dev engine. Its scripts can be checked out by CI at a pinned commit.
 - [`pass`](skills/pass/SKILL.md): handling pass-store credentials with the
   `passenv`/`passkeys` helpers. Agent guidance only; no CI dependency.
+- [`exe-dev`](skills/exe-dev/SKILL.md): independently written, security-conscious
+  guide to exe.dev VMs, with links to the official documentation.
 
 ## Install a skill for local agent use
 
 `gh` 2.90+ supports agent skills without another package manager:
 
 ```sh
-# Available in all projects on this machine (recommended):
-gh skill install trouze/agent-skills dagger-exe --agent opencode --scope user --pin v1.0.1
+# All three skills, available in every project (recommended):
+gh skill install trouze/agent-skills --all --agent opencode --scope user --pin v1.3.0
 
-# Or install into one project instead (a tracked copy; no longer one local copy):
+# Or select only one skill:
 gh skill install trouze/agent-skills dagger-exe --agent opencode --scope project --pin v1.0.1
 
 # Also supported: --agent claude-code, and gh skill update for intentional upgrades.
@@ -30,10 +32,12 @@ don't need to copy skills into each project for an agent to find them. Installed
 files are local replicas of this Git repo, not another source of truth. A pinned
 install won't silently update when a new release is published.
 
-For `pass` on this Mac (one global installation, not one copy per project):
+The installer may not retain executable bits on shell scripts. For the
+`dagger-exe` helpers and the `pass` commands, run these once after installation
+or update:
 
 ```sh
-gh skill install trouze/agent-skills pass --agent opencode --scope user --pin v1.2.1
+chmod u+x ~/.config/opencode/skills/dagger-exe/scripts/*.sh
 python3 ~/.config/opencode/skills/pass/scripts/install_helpers.py
 ```
 
@@ -42,24 +46,17 @@ Unlike scripts installed by `gh skill install`, these have executable bits;
 their implementation lives in the installed skill and follows its pinned
 version. It refuses to replace existing launchers without `--replace`.
 
-### Externally maintained skills
+### Upstream exe.dev skill
 
-Keep the official [`using-exe-dev`](https://github.com/boldsoftware/exe.dev/blob/main/skill/SKILL.md)
-skill upstream-owned instead of copying it into this repository. Its GitHub
-release tags are for other exe.dev components and can lag behind the skill.
-Install by **skill name** (not `skill/SKILL.md`, which installs to a generic
-local directory), and track the upstream `main` branch deliberately:
-
-```sh
-gh skill install boldsoftware/exe.dev using-exe-dev@main --agent opencode --scope user
-gh skill update using-exe-dev  # check/apply changes when you choose to update
-```
-
-Preview changes with `gh skill preview boldsoftware/exe.dev using-exe-dev@main`
-before updating. The current upstream skill suggests SSH `accept-new` for
-unfamiliar hosts; prefer independently verified host keys for VM access, as
-documented in our `dagger-exe` skill. No exe.dev account or VM keys are copied
-into this repository.
+`exe-dev` is our original guide, **not** a copy of the official
+[`using-exe-dev`](https://github.com/boldsoftware/exe.dev/blob/main/skill/SKILL.md)
+skill (its source repository has no published reuse license). A weekly,
+read-only [workflow](.github/workflows/check-exe-dev-upstream.yml) compares
+the last upstream skill commit against our recorded revision. If it changes,
+review their diff and update our guide in a normal PR. It never copies or
+executes upstream text automatically. The current upstream skill advises SSH
+`accept-new` on first contact; our guide requires independent host-key
+verification instead.
 
 ## OpenCode configuration across projects
 

@@ -1,0 +1,13 @@
+# Append to ~/.ssh/config after registering an authorized key.
+# Robust exe.dev VM routing: this connects to VM "dagger" as its login user.
+Host dagger-exe-vm
+  HostName vm.exe.xyz
+  User vm+dagger
+  IdentityFile ~/.ssh/dagger-exe
+  IdentitiesOnly yes
+  ForwardAgent no
+  StrictHostKeyChecking yes
+  ServerAliveInterval 30
+  ServerAliveCountMax 3
+# Trust the host key through an already verified connection first.
+# For laptops with passphrased keys, load the key into ssh-agent.

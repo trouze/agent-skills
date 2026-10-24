@@ -1,0 +1,73 @@
+# Replace <PINNED_AGENT_SKILLS_COMMIT> with a reviewed release's full commit SHA.
+# Create a protected GitHub Environment "dagger-exe", restricted to main.
+# Register a VM-scoped SSH key and add the two secrets documented below.
+name: Dagger via exe.dev
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# This serializes jobs in THIS repository only, not across all projects.
+concurrency:
+  group: dagger-exe
+  cancel-in-progress: false
+
+jobs:
+  check:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    environment: dagger-exe
+    env:
+      SKILL: .ci/agent-skills/skills/dagger-exe
+      EXE_DAGGER_HOST: ${{ vars.EXE_DAGGER_HOST || 'vm.exe.xyz' }}
+      EXE_DAGGER_USER: ${{ vars.EXE_DAGGER_USER || 'vm+dagger' }}
+      EXE_DAGGER_SOCKET: ${{ vars.EXE_DAGGER_SOCKET || '/home/exedev/.config/colima/default/docker.sock' }}
+    steps:
+      - name: Check out trusted project code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Check out pinned Dagger skill
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: trouze/agent-skills
+          ref: <PINNED_AGENT_SKILLS_COMMIT>
+          path: .ci/agent-skills
+          persist-credentials: false
+
+      - name: Install pinned Dagger CLI
+        shell: bash
+        run: |
+          BIN_DIR="$RUNNER_TEMP/dagger-bin" "$SKILL/scripts/install-cli.sh"
+          echo "$RUNNER_TEMP/dagger-bin" >> "$GITHUB_PATH"
+
+      - name: Configure VM-scoped SSH credentials
+        shell: bash
+        env:
+          EXE_DAGGER_SSH_KEY: ${{ secrets.EXE_DAGGER_SSH_KEY }}
+          EXE_DAGGER_KNOWN_HOSTS: ${{ secrets.EXE_DAGGER_KNOWN_HOSTS }}
+        run: '"$SKILL/scripts/configure-ci-ssh.sh"'
+
+      - name: Configure explicit remote Colima socket
+        shell: bash
+        run: |
+          "$SKILL/scripts/create-remote-context.sh" dagger-exe-vm "$EXE_DAGGER_SOCKET" dagger-exe
+          "$SKILL/scripts/doctor.sh" remote
+
+      - name: Run project checks
+        shell: bash
+        # Customize to the project's actual beta/Dang entry point.
+        run: '"$SKILL/scripts/with-engine.sh" remote check --parallel 2'
+
+      - name: Remove temporary credentials
+        if: always()
+        shell: bash
+        run: |
+          docker context rm --force dagger-exe >/dev/null 2>&1 || true
+          rm -f -- "$RUNNER_TEMP/dagger-exe-ssh/id_ed25519" "$RUNNER_TEMP/dagger-exe-ssh/known_hosts" "$RUNNER_TEMP/dagger-exe-ssh/ssh_config"

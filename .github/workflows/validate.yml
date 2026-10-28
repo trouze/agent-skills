@@ -18,9 +18,6 @@ jobs:
       - name: Check script syntax and skill metadata
         shell: bash
         run: |
-          bash -n skills/dagger-exe/scripts/*.sh
-          grep -Eq '^name: dagger-exe$' skills/dagger-exe/SKILL.md
-          grep -Eq '^  version: "[0-9]+\.[0-9]+\.[0-9]+"$' skills/dagger-exe/SKILL.md
           grep -Eq '^name: pass$' skills/pass/SKILL.md
           grep -Eq '^  version: "[0-9]+\.[0-9]+\.[0-9]+"$' skills/pass/SKILL.md
           grep -Eq '^name: exe-dev$' skills/exe-dev/SKILL.md
